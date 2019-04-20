@@ -89,7 +89,7 @@ void dynListSet(PHB_GLFW phb_glfw, PHB_ITEM pCallback)
       callback.callbackItems = realloc(callback.callbackItems, sizeof(CALLBACK_ITEM) + callback.capacity);
       for (size_t i = actualSize; i < callback.capacity; i++)
       {
-         PCALLBACK_ITEM pItem = &callback.callbackItems[i];
+         pItem = &callback.callbackItems[i];
          pItem->index = i;
          pItem->used = false;
          pItem->phb_glfw = NULL;
