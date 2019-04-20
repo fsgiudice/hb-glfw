@@ -35,6 +35,20 @@ HB_FUNC(GLATTACHSHADER)
    }
 }
 
+/* void glBegin(GLenum mode) */
+HB_FUNC(GLBEGIN)
+{
+   if (HB_ISNUM(1))
+   {
+      GLenum mode = hb_parni(1);
+      glBegin(mode);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
 /* void glBindBuffer(GLenum target, GLuint buffer) */
 HB_FUNC(GLBINDBUFFER)
 {
@@ -67,8 +81,15 @@ HB_FUNC(GLBINDVERTEXARRAY)
 /* void glClear(GLbitfield mask) */
 HB_FUNC(GLCLEAR)
 {
-   GLbitfield mask = hb_parni(1);
-   glClear(mask);
+   if (HB_ISNUM(1))
+   {
+      GLbitfield mask = hb_parni(1);
+      glClear(mask);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
 }
 
 /* void glClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) */
@@ -77,6 +98,19 @@ HB_FUNC(GLCLEARCOLOR)
    if (HB_ISNUM(1) && HB_ISNUM(2) && HB_ISNUM(3) && HB_ISNUM(4))
    {
       glClearColor((float)hb_parnd(1), (float)hb_parnd(2), (float)hb_parnd(3), (float)hb_parnd(4));
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* void glColor3f(GLfloat red, GLfloat green, GLfloat blue) */
+HB_FUNC(GLCOLOR3F)
+{
+   if (HB_ISNUM(1) && HB_ISNUM(2) && HB_ISNUM(3))
+   {
+      glColor3f((float)hb_parnd(1), (float)hb_parnd(2), (float)hb_parnd(3));
    }
    else
    {
@@ -162,6 +196,12 @@ HB_FUNC(GLENABLEVERTEXATTRIBARRAY)
    }
 }
 
+/* void glEnd(void) */
+HB_FUNC(GLEND)
+{
+   glEnd();
+}
+
 /* void glGenBuffers(GLsizei n, GLuint *buffers) */
 HB_FUNC(GLGENBUFFERS)
 {
@@ -236,13 +276,73 @@ HB_FUNC(GLLINKPROGRAM)
    }
 }
 
+/* void glLoadIdentity(void) */
+HB_FUNC(GLLOADIDENTITY)
+{
+   glLoadIdentity();
+}
+
+/* void glRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z) */
+HB_FUNC(GLROTATEF)
+{
+   if (HB_ISNUM(1) && HB_ISNUM(2) && HB_ISNUM(3) && HB_ISNUM(4))
+   {
+      glRotatef((float)hb_parnd(1), (float)hb_parnd(2), (float)hb_parnd(3), (float)hb_parnd(4));
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* void glMatrixMode(GLenum mode) */
+HB_FUNC(GLMATRIXMODE)
+{
+   if (HB_ISNUM(1))
+   {
+      GLenum mode = hb_parni(1);
+      glMatrixMode(mode);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* void glOrtho(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar) */
+HB_FUNC(GLORTHO)
+{
+   if (HB_ISNUM(1) && HB_ISNUM(2) && HB_ISNUM(3) && HB_ISNUM(4) && HB_ISNUM(5) && HB_ISNUM(6))
+   {
+
+      GLdouble left = hb_parnd(1);
+      GLdouble right = hb_parnd(2);
+      GLdouble bottom = hb_parnd(3);
+      GLdouble top = hb_parnd(4);
+      GLdouble zNear = hb_parnd(5);
+      GLdouble zFar = hb_parnd(6);
+      glOrtho(left, right, bottom, top, zNear, zFar);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
 /* void glShaderSource(GLuint shader, GLsizei count, const GLchar *const*string, const GLint *length) */
 HB_FUNC(GLSHADERSOURCE)
 {
-   GLuint shader = hb_parni(1);
-   GLsizei count = hb_parni(2);
-   const char *string = hb_parc(3);
-   glShaderSource(shader, count, &string, NULL);
+   if (HB_ISNUM(1) && HB_ISNUM(2) && HB_ISCHAR(3))
+   {
+      GLuint shader = hb_parni(1);
+      GLsizei count = hb_parni(2);
+      const char *string = hb_parc(3);
+      glShaderSource(shader, count, &string, NULL);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
 }
 
 /* void glUseProgram(GLuint program) */
@@ -252,6 +352,32 @@ HB_FUNC(GLUSEPROGRAM)
    {
       GLuint program = hb_parni(1);
       glUseProgram(program);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* void glVertex2f(GLfloat x, GLfloat y) */
+HB_FUNC(GLVERTEX2F)
+{
+   if (HB_ISNUM(1) && HB_ISNUM(2))
+   {
+      glVertex2f((float)hb_parnd(1), (float)hb_parnd(2));
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* void glVertex3f(GLfloat x, GLfloat y, GLfloat z) */
+HB_FUNC(GLVERTEX3F)
+{
+   if (HB_ISNUM(1) && HB_ISNUM(2) && HB_ISNUM(3))
+   {
+      glVertex3f((float)hb_parnd(1), (float)hb_parnd(2), (float)hb_parnd(3));
    }
    else
    {
