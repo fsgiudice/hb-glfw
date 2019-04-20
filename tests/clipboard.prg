@@ -25,7 +25,7 @@ PROCEDURE Main( argc )
    glfwSetErrorCallback( @error_callback() )
 
    IF !glfwInit()
-      ? "Failed to initialize GLFW"
+      OutStd( e"\nFailed to initialize GLFW" )
       RETURN
    ENDIF
 
@@ -33,7 +33,7 @@ PROCEDURE Main( argc )
 
    IF window == NIL
       glfwTerminate()
-      ? "Failed to open GLFW window"
+      OutStd( e"\nFailed to open GLFW window" )
       RETURN
    ENDIF
 
@@ -55,20 +55,20 @@ PROCEDURE Main( argc )
 
    glfwTerminate()
 
-   ? "Finishing... ;)"
+   OutStd( e"\nFinishing... ;)" )
 
    RETURN
 
 STATIC PROCEDURE usage()
 
-   ? "Usage: clipboard [-h]"
+   OutStd( e"\nUsage: clipboard [-h]" )
 
    RETURN
 
 STATIC PROCEDURE error_callback( nError, cDescription )
 
    HB_SYMBOL_UNUSED( nError )
-   ? "Error: ", cDescription
+   OutStd( e"\nError: ", cDescription )
 
    RETURN
 
@@ -82,16 +82,16 @@ STATIC PROCEDURE key_callback( window, key, scancode, action, mods )
 
    SWITCH KEY
    CASE GLFW_KEY_ESCAPE
-      ? "ESCAPE"
+      OutStd( e"\nESCAPE" )
       glfwSetWindowShouldClose( window, GLFW_TRUE )
       EXIT
    CASE GLFW_KEY_V
       IF mods == MODIFIER
          string := glfwGetClipboardString( NIL )
          IF string != NIL
-            ? e"Clipboard contains \"", string, e"\""
+           OutStd( e"\nClipboard contains ", string )
          ELSE
-            ? "Clipboard does not contain a string"
+            OutStd( e"\nClipboard does not contain a string" )
          ENDIF
          EXIT
       ENDIF
@@ -99,11 +99,11 @@ STATIC PROCEDURE key_callback( window, key, scancode, action, mods )
       IF mods == MODIFIER
          string := "Hello GLFW world!"
          glfwSetClipboardString( NIL, string )
-         ? "Setting clipboard to ", string
+         OutStd( e"\nSetting clipboard to ", string )
          EXIT
       ENDIF
    OTHERWISE
-      ? key, scancode, action, mods
+      OutStd( key, scancode, action, mods )
    ENDSWITCH
 
    RETURN

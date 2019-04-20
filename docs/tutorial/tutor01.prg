@@ -22,6 +22,7 @@ FUNCTION Main()
    ENDIF
 
    glfwMakeContextCurrent( window )
+   gladLoadGL_glfwGetProcAddress()   
    glfwSwapInterval( 1 )
    glViewport( 0, 0, 800, 600 )
 

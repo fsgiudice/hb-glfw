@@ -19,6 +19,7 @@ FUNCTION Main()
 
    /* Make the window's context current */
    glfwMakeContextCurrent( window )
+   gladLoadGL_glfwGetProcAddress()
 
    /* Loop until the user closes the window */
    DO WHILE ! glfwWindowShouldClose( window )

@@ -27,6 +27,7 @@ FUNCTION Main()
    ENDIF
 
    glfwMakeContextCurrent( window )
+   gladLoadGL_glfwGetProcAddress()
    glfwSwapInterval( 1 )
 
    DO WHILE ! glfwWindowShouldClose( window )

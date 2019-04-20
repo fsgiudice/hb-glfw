@@ -19,10 +19,11 @@ FUNCTION Main()
    ENDIF
 
    glfwMakeContextCurrent( pWindow )
+   gladLoadGL_glfwGetProcAddress()
    glfwSwapInterval( 1 )
    glViewport( 0, 0, 800, 600 )
 
-   DO WHILE lContinue
+   DO WHILE ! lContinue
 
       IF glfwWindowShouldClose( pWindow )
          lContinue = .F.
