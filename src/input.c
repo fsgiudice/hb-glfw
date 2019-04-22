@@ -186,7 +186,6 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
    }
 }
 
-/* typedef void (* GLFWkeyfun)(GLFWwindow*,int,int,int,int) */
 /* GLFWAPI GLFWkeyfun glfwSetKeyCallback(GLFWwindow* handle, GLFWkeyfun cbfun) */
 HB_FUNC(GLFWSETKEYCALLBACK)
 {
@@ -261,9 +260,51 @@ HB_FUNC(GLFWSETCHARCALLBACK)
    }
 }
 
+/* char mods callback */
+static void char_mods_callback(GLFWwindow *window, unsigned int codepoint, int mods)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushInteger(codepoint);
+         hb_vmPushInteger(mods);
+
+         hb_vmProc(3);
+      }
+   }
+}
 /* GLFWAPI GLFWcharmodsfun glfwSetCharModsCallback(GLFWwindow* handle, GLFWcharmodsfun cbfun) */
 HB_FUNC(GLFWSETCHARMODSCALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetCharModsCallback(phb->p, char_mods_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
 }
 
 /* mouse button callback */
@@ -458,9 +499,52 @@ HB_FUNC(GLFWSETSCROLLCALLBACK)
    }
 }
 
+/* drop_callback */
+static void drop_callback(GLFWwindow *window, int count, const char **paths)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushInteger(count);
+         hb_vmPushString((const char *)paths, (HB_SIZE)paths);
+
+         hb_vmProc(3);
+      }
+   }
+}
+
 /* GLFWAPI GLFWdropfun glfwSetDropCallback(GLFWwindow* handle, GLFWdropfun cbfun) */
 HB_FUNC(GLFWSETDROPCALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetDropCallback(phb->p, drop_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
 }
 
 /* GLFWAPI int glfwJoystickPresent(int jid) */
