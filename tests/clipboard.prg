@@ -15,7 +15,7 @@ Modified by Rafał Jopek
 
 PROCEDURE Main( argc )
 
-   LOCAL window
+   LOCAL pWindow
 
    IF argc != NIL
       usage()
@@ -24,31 +24,31 @@ PROCEDURE Main( argc )
 
    glfwSetErrorCallback( @error_callback() )
 
-   IF !glfwInit()
+   IF ! glfwInit()
       OutStd( e"\nFailed to initialize GLFW" )
       RETURN
    ENDIF
 
-   window := glfwCreateWindow( 200, 200, "Clipboard Test", NIL, NIL )
+   pWindow := glfwCreateWindow( 200, 200, "Clipboard Test", NIL, NIL )
 
-   IF window == NIL
+   IF pWindow == NIL
       glfwTerminate()
-      OutStd( e"\nFailed to open GLFW window" )
+      OutStd( e"\nFailed to open GLFW Window" )
       RETURN
    ENDIF
 
-   glfwMakeContextCurrent( window )
+   glfwMakeContextCurrent( pWindow )
    gladLoadGL_glfwGetProcAddress()
    glfwSwapInterval( 1 )
 
-   glfwSetKeyCallback( window, @key_callback() )
+   glfwSetKeyCallback( pWindow, @key_callback() )
 
    glClearColor( 0.5, 0.5, 0.5, 0 )
 
-   DO WHILE !glfwWindowShouldClose( window )
+   DO WHILE !glfwWindowShouldClose( pWindow )
       glClear( GL_COLOR_BUFFER_BIT )
 
-      glfwSwapBuffers( window )
+      glfwSwapBuffers( pWindow )
       glfwWaitEvents()
 
    ENDDO
@@ -72,7 +72,7 @@ STATIC PROCEDURE error_callback( nError, cDescription )
 
    RETURN
 
-STATIC PROCEDURE key_callback( window, key, scancode, action, mods )
+STATIC PROCEDURE key_callback( pWindow, key, scancode, action, mods )
 
    LOCAL string
 
@@ -80,10 +80,10 @@ STATIC PROCEDURE key_callback( window, key, scancode, action, mods )
       RETURN
    ENDIF
 
-   SWITCH KEY
+   SWITCH key
    CASE GLFW_KEY_ESCAPE
       OutStd( e"\nESCAPE" )
-      glfwSetWindowShouldClose( window, GLFW_TRUE )
+      glfwSetWindowShouldClose( pWindow, GLFW_TRUE )
       EXIT
    CASE GLFW_KEY_V
       IF mods == MODIFIER
