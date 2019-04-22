@@ -105,6 +105,20 @@ HB_FUNC(GLCLEARCOLOR)
    }
 }
 
+/* void glClearDepth(GLclampd depth) */
+HB_FUNC(GLCLEARDEPTH)
+{
+   if (HB_ISNUM(1))
+   {
+      GLclampd depth = hb_parnd(1);
+      glClearDepth(depth);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
 /* void glColor3f(GLfloat red, GLfloat green, GLfloat blue) */
 HB_FUNC(GLCOLOR3F)
 {
@@ -166,6 +180,20 @@ HB_FUNC(GLDELETESHADER)
    }
 }
 
+/* void glDepthFunc(GLenum func) */
+HB_FUNC(GLDEPTHFUNC)
+{
+   if (HB_ISNUM(1))
+   {
+      GLenum func = hb_parni(1);
+      glDepthFunc(func);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
 /* void glDrawArrays(GLenum mode, GLint first, GLsizei count) */
 HB_FUNC(GLDRAWARRAYS)
 {
@@ -175,6 +203,20 @@ HB_FUNC(GLDRAWARRAYS)
       GLint first = hb_parni(2);
       GLsizei count = hb_parni(3);
       glDrawArrays(mode, first, count);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* void glEnable(GLenum cap) */
+HB_FUNC(GLENABLE)
+{
+   if (HB_ISNUM(1))
+   {
+      GLenum cap = hb_parni(1);
+      glEnable(cap);
    }
    else
    {
@@ -194,6 +236,12 @@ HB_FUNC(GLENABLEVERTEXATTRIBARRAY)
    {
       hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
    }
+}
+
+/* void glFlush(void) */
+HB_FUNC(GLFLUSH)
+{
+   glFlush();
 }
 
 /* void glEnd(void) */
@@ -255,6 +303,21 @@ HB_FUNC(GLGETUNIFORMLOCATION)
       GLuint program = hb_parni(1);
       const GLchar *name = hb_parc(2);
       hb_retni(glGetUniformLocation(program, name));
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* void APIENTRY glHint(GLenum target,GLenum mode) */
+HB_FUNC(GLHINT)
+{
+   if (HB_ISNUM(1) && HB_ISNUM(2))
+   {
+      GLenum target = hb_parni(1);
+      GLenum mode = hb_parni(2);
+      glHint(target, mode);
    }
    else
    {
@@ -329,6 +392,20 @@ HB_FUNC(GLORTHO)
    }
 }
 
+/* void glShadeModel(GLenum mode) */
+HB_FUNC(GLSHADEMODEL)
+{
+   if (HB_ISNUM(1))
+   {
+      GLenum mode = hb_parni(1);
+      glShadeModel(mode);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
 /* void glShaderSource(GLuint shader, GLsizei count, const GLchar *const*string, const GLint *length) */
 HB_FUNC(GLSHADERSOURCE)
 {
@@ -338,6 +415,19 @@ HB_FUNC(GLSHADERSOURCE)
       GLsizei count = hb_parni(2);
       const char *string = hb_parc(3);
       glShaderSource(shader, count, &string, NULL);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* void glTranslatef(GLfloat x, GLfloat y, GLfloat z) */
+HB_FUNC(GLTRANSLATEF)
+{
+   if (HB_ISNUM(1) && HB_ISNUM(2) && HB_ISNUM(3))
+   {
+      glTranslatef((float)hb_parnd(1), (float)hb_parnd(2), (float)hb_parnd(3));
    }
    else
    {
