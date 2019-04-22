@@ -1,9 +1,7 @@
 /*
 The example was taken from the original file
 https://github.com/glfw/glfw/blob/master/tests/title.c
-
 It is a copyrighted work provided under license.
-
 Modified by Rafał Jopek
 */
 

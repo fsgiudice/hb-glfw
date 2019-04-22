@@ -21,7 +21,7 @@ PROCEDURE Main()
       OutStd( e"\nFailed to open GLFW Window" )
       RETURN
    ENDIF
-
+   
    glfwMakeContextCurrent( pWindow )
    gladLoadGL_glfwGetProcAddress()
    glfwSetKeyCallback( pWindow, @key_callback() )
@@ -33,22 +33,22 @@ PROCEDURE Main()
 
       glViewport( 0, 0, nWidth, nHeight )
       glClear( GL_COLOR_BUFFER_BIT )
-
       glMatrixMode( GL_PROJECTION )
       glLoadIdentity()
       glOrtho( -nRatio, nRatio, -1, 1, 1, -1 )
       glMatrixMode( GL_MODELVIEW )
-
       glLoadIdentity()
       glRotatef( glfwGetTime() * 50, 0, 0, 1 )
 
-      glBegin( GL_TRIANGLES )
+      glBegin( GL_QUADS )
       glColor3f( 1, 0, 0 )
-      glVertex3f( -0.6, -0.4, 0 )
+      glVertex3f( -0.5, -0.5, -0.5 )
       glColor3f( 0, 1, 0 )
-      glVertex3f( 0.6, -0.4, 0 )
+      glVertex3f( 0.5, -0.5, -0.5 )
       glColor3f( 0, 0, 1 )
-      glVertex3f( 0, 0.6, 0 )
+      glVertex3f( 0.5,  0.5, -0.5 )
+      glColor3f( 1, 1, 0 )
+      glVertex3f( -0.5,  0.5, 0.5 )
       glEnd()
 
       glfwSwapBuffers( pWindow )
@@ -59,7 +59,7 @@ PROCEDURE Main()
    glfwDestroyWindow( pWindow )
    glfwTerminate()
 
-   OutStd( e"\nFinishing... ;)" )
+   OutStd( e"\nFinishing..." )
 
    RETURN
 

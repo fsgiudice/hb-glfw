@@ -21,6 +21,7 @@ FUNCTION Main()
    glfwMakeContextCurrent( pWindow )
    gladLoadGL_glfwGetProcAddress()
    glfwSwapInterval( 1 )
+
    glViewport( 0, 0, 800, 600 )
 
    DO WHILE ! lContinue
