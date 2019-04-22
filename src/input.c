@@ -186,7 +186,7 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
    }
 }
 
-/* typedef void (* GLFWkeyfun)(GLFWwindow*,int,int,int,int); */
+/* typedef void (* GLFWkeyfun)(GLFWwindow*,int,int,int,int) */
 /* GLFWAPI GLFWkeyfun glfwSetKeyCallback(GLFWwindow* handle, GLFWkeyfun cbfun) */
 HB_FUNC(GLFWSETKEYCALLBACK)
 {
@@ -214,9 +214,51 @@ HB_FUNC(GLFWSETKEYCALLBACK)
    }
 }
 
+/* char callback */
+static void char_callback(GLFWwindow *window, unsigned int codepoint)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushInteger(codepoint);
+
+         hb_vmProc(2);
+      }
+   }
+}
+
 /* GLFWAPI GLFWcharfun glfwSetCharCallback(GLFWwindow* handle, GLFWcharfun cbfun) */
 HB_FUNC(GLFWSETCHARCALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetCharCallback(phb->p, char_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
 }
 
 /* GLFWAPI GLFWcharmodsfun glfwSetCharModsCallback(GLFWwindow* handle, GLFWcharmodsfun cbfun) */
@@ -224,24 +266,196 @@ HB_FUNC(GLFWSETCHARMODSCALLBACK)
 {
 }
 
+/* mouse button callback */
+static void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushInteger(button);
+         hb_vmPushInteger(action);
+         hb_vmPushInteger(mods);
+
+         hb_vmProc(4);
+      }
+   }
+}
+
 /* GLFWAPI GLFWmousebuttonfun glfwSetMouseButtonCallback(GLFWwindow* handle, GLFWmousebuttonfun cbfun) */
 HB_FUNC(GLFWSETMOUSEBUTTONCALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetMouseButtonCallback(phb->p, mouse_button_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* cursor position callback */
+static void cursor_position_callback(GLFWwindow *window, double x, double y)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushDouble(x, HB_DEFAULT_DECIMALS);
+         hb_vmPushDouble(y, HB_DEFAULT_DECIMALS);
+
+         hb_vmProc(3);
+      }
+   }
 }
 
 /* GLFWAPI GLFWcursorposfun glfwSetCursorPosCallback(GLFWwindow* handle, GLFWcursorposfun cbfun) */
 HB_FUNC(GLFWSETCURSORPOSCALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetCursorPosCallback(phb->p, cursor_position_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* cursor enter callback */
+static void cursor_enter_callback(GLFWwindow *window, int entered)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushInteger(entered);
+
+         hb_vmProc(2);
+      }
+   }
 }
 
 /* GLFWAPI GLFWcursorenterfun glfwSetCursorEnterCallback(GLFWwindow* handle, GLFWcursorenterfun cbfun) */
 HB_FUNC(GLFWSETCURSORENTERCALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetCursorEnterCallback(phb->p, cursor_enter_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* scroll callback */
+static void scroll_callback(GLFWwindow *window, double x, double y)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushDouble(x, HB_DEFAULT_DECIMALS);
+         hb_vmPushDouble(y, HB_DEFAULT_DECIMALS);
+
+         hb_vmProc(3);
+      }
+   }
 }
 
 /* GLFWAPI GLFWscrollfun glfwSetScrollCallback(GLFWwindow* handle, GLFWscrollfun cbfun) */
 HB_FUNC(GLFWSETSCROLLCALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetScrollCallback(phb->p, scroll_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
 }
 
 /* GLFWAPI GLFWdropfun glfwSetDropCallback(GLFWwindow* handle, GLFWdropfun cbfun) */

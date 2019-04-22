@@ -1,4 +1,6 @@
 #include "hbglfw.h"
+#include "hbapiitm.h"
+#include "hbvm.h"
 
 /* GLFWAPI GLFWwindow* glfwCreateWindow(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share) */
 HB_FUNC(GLFWCREATEWINDOW)
@@ -474,49 +476,429 @@ HB_FUNC(GLFWGETWINDOWUSERPOINTER)
 {
 }
 
+/* window pos callback */
+static void window_pos_callback(GLFWwindow *window, int x, int y)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushInteger(x);
+         hb_vmPushInteger(y);
+
+         hb_vmProc(3);
+      }
+   }
+}
+
 /* GLFWAPI GLFWwindowposfun glfwSetWindowPosCallback(GLFWwindow* handle, GLFWwindowposfun cbfun) */
 HB_FUNC(GLFWSETWINDOWPOSCALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetWindowPosCallback(phb->p, window_pos_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* window size callback */
+static void window_size_callback(GLFWwindow *window, int width, int height)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushInteger(width);
+         hb_vmPushInteger(height);
+
+         hb_vmProc(3);
+      }
+   }
 }
 
 /* GLFWAPI GLFWwindowsizefun glfwSetWindowSizeCallback(GLFWwindow* handle, GLFWwindowsizefun cbfun) */
 HB_FUNC(GLFWSETWINDOWSIZECALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetWindowSizeCallback(phb->p, window_size_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* window close callback */
+static void window_close_callback(GLFWwindow *window)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+
+         hb_vmProc(1);
+      }
+   }
 }
 
 /* GLFWAPI GLFWwindowclosefun glfwSetWindowCloseCallback(GLFWwindow* handle, GLFWwindowclosefun cbfun) */
 HB_FUNC(GLFWSETWINDOWCLOSECALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetWindowCloseCallback(phb->p, window_close_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* window refresh callback */
+static void window_refresh_callback(GLFWwindow *window)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+
+         hb_vmProc(1);
+      }
+   }
 }
 
 /* GLFWAPI GLFWwindowrefreshfun glfwSetWindowRefreshCallback(GLFWwindow* handle, GLFWwindowrefreshfun cbfun) */
 HB_FUNC(GLFWSETWINDOWREFRESHCALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetWindowRefreshCallback(phb->p, window_refresh_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* window focus callback */
+static void window_focus_callback(GLFWwindow *window, int focused)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushInteger(focused);
+
+         hb_vmProc(2);
+      }
+   }
 }
 
 /* GLFWAPI GLFWwindowfocusfun glfwSetWindowFocusCallback(GLFWwindow* handle, GLFWwindowfocusfun cbfun) */
 HB_FUNC(GLFWSETWINDOWFOCUSCALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetWindowFocusCallback(phb->p, window_focus_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* window iconify callback */
+static void window_iconify_callback(GLFWwindow *window, int iconified)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushInteger(iconified);
+
+         hb_vmProc(2);
+      }
+   }
 }
 
 /* GLFWAPI GLFWwindowiconifyfun glfwSetWindowIconifyCallback(GLFWwindow* handle, GLFWwindowiconifyfun cbfun) */
 HB_FUNC(GLFWSETWINDOWICONIFYCALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetWindowIconifyCallback(phb->p, window_iconify_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* window maximize callback */
+static void window_maximize_callback(GLFWwindow *window, int maximized)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushInteger(maximized);
+
+         hb_vmProc(2);
+      }
+   }
 }
 
 /* GLFWAPI GLFWwindowmaximizefun glfwSetWindowMaximizeCallback(GLFWwindow* handle, GLFWwindowmaximizefun cbfun) */
 HB_FUNC(GLFWSETWINDOWMAXIMIZECALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetWindowMaximizeCallback(phb->p, window_maximize_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* framebuffer size callback */
+static void framebuffer_size_callback(GLFWwindow *window, int width, int height)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushInteger(width);
+         hb_vmPushInteger(height);
+
+         hb_vmProc(3);
+      }
+   }
 }
 
 /* GLFWAPI GLFWframebuffersizefun glfwSetFramebufferSizeCallback(GLFWwindow* handle, GLFWframebuffersizefun cbfun) */
 HB_FUNC(GLFWSETFRAMEBUFFERSIZECALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetFramebufferSizeCallback(phb->p, framebuffer_size_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
+}
+
+/* window content scale callback */
+static void window_content_scale_callback(GLFWwindow *window, float xscale, float yscale)
+{
+   PCALLBACK_ITEM pItem = dynListFind(window);
+
+   if (pItem != NULL)
+   {
+      if (hb_vmRequestReenter())
+      {
+         hb_vmPush(pItem->pCallback);
+         hb_vmPushNil();
+
+         hb_vmPushPointerGC(pItem->phb_glfw);
+         hb_vmPushDouble(xscale, HB_DEFAULT_DECIMALS);
+         hb_vmPushDouble(yscale, HB_DEFAULT_DECIMALS);
+
+         hb_vmProc(3);
+      }
+   }
 }
 
 /* GLFWAPI GLFWwindowcontentscalefun glfwSetWindowContentScaleCallback(GLFWwindow* handle, GLFWwindowcontentscalefun cbfun) */
 HB_FUNC(GLFWSETWINDOWCONTENTSCALECALLBACK)
 {
+   PHB_GLFW phb = hbglfw_param(1, hbglfw_window);
+   PHB_ITEM pCallback = hb_param(2, HB_IT_SYMBOL);
+   PHB_SYMB pSymbol = NULL;
+
+   if (pCallback)
+   {
+      pSymbol = hb_itemGetSymbol(pCallback);
+      if (!pSymbol->value.pFunPtr)
+      {
+         pSymbol = NULL;
+      }
+   }
+
+   if (phb && pSymbol)
+   {
+      glfwSetWindowContentScaleCallback(phb->p, window_content_scale_callback);
+      dynListSet(phb, pCallback);
+   }
+   else
+   {
+      hb_errRT_BASE_SubstR(EG_ARG, 3012, NULL, HB_ERR_FUNCNAME, HB_ERR_ARGS_BASEPARAMS);
+   }
 }
 
 /* GLFWAPI void glfwPollEvents(void) */
