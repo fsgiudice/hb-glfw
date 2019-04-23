@@ -12,6 +12,7 @@
  #define GLFW_TRUE                   1
  #define GLFW_FALSE                  0
  
+ #define GLFW_RELEASE                0
  #define GLFW_PRESS                  1
  #define GLFW_REPEAT                 2
  #define GLFW_HAT_CENTERED           0

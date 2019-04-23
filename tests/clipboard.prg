@@ -80,7 +80,7 @@ STATIC PROCEDURE key_callback( pWindow, key, scancode, action, mods )
       RETURN
    ENDIF
 
-   SWITCH key
+   SWITCH ( key )
    CASE GLFW_KEY_ESCAPE
       OutStd( e"\nESCAPE" )
       glfwSetWindowShouldClose( pWindow, GLFW_TRUE )

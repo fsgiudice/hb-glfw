@@ -499,7 +499,7 @@ HB_FUNC(GLFWSETSCROLLCALLBACK)
    }
 }
 
-/* drop_callback */
+/* drop callback */
 static void drop_callback(GLFWwindow *window, int count, const char **paths)
 {
    PCALLBACK_ITEM pItem = dynListFind(window);

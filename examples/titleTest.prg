@@ -1,3 +1,6 @@
+/*
+   Test title.
+*/
 
 #include "hbglfw.ch"
 
@@ -55,11 +58,11 @@ STATIC PROCEDURE key_callback( pWindow, key, scancode, action, mods )
       RETURN
    ENDIF
 
-   SWITCH KEY
+   SWITCH ( key )
    CASE GLFW_KEY_1
       glfwSetWindowTitle( pWindow, "Zażółć gęślą jaźń" )
       EXIT
-      
+
    CASE GLFW_KEY_2
       glfwSetWindowTitle( pWindow, "這是一個中文文本" )
       EXIT
